@@ -38,3 +38,8 @@ pip install -r requirements.txt
 Once the dependencies are installed, you can run the script to automatically edit the videos. For example:
 
 python extractDeathTimes.py
+
+### IMPORTANT
+
+I use a boolean within extractDeathTimes.py named 'addIntroOuttroAndOverlay'; which will add my intro video, outro, and an overlay image to the final movie.
+Set this to 'False' if you do not want those added.  
