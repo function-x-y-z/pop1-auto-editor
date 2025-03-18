@@ -1,0 +1,14 @@
+# Ignore wav and mkv files
+*.wav
+*.mkv
+
+# Ignore directories containing wav and mkv files
+**/.wav
+**/.mkv
+
+UI.assets
+outtro.mp4
+overlay.png
+processed_videos/*
+stitchTogetherClips.py
+videos_to_process/*
