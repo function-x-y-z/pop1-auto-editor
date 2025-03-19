@@ -1,14 +1,14 @@
-# Ignore wav and mkv files
-*.wav
-*.mkv
-
-# Ignore directories containing wav and mkv files
-**/.wav
-**/.mkv
-
 UI.assets
 outtro.mp4
+intro.mkv
+intro.wav
 overlay.png
 processed_videos/*
 stitchTogetherClips.py
 videos_to_process/*
+Hitsound_ShieldBreak.wav
+Music_Elimination_Win.wav
+Music_RoundEnd_Victory_Stinger.wav
+extracted_audio.wav
+storage/*
+processed_original_videos/*
