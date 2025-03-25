@@ -173,11 +173,8 @@ def stitchVideosTogether(times, inputVideo, overlayImage, outroVideo , addIntroA
             # Create a composed clip with the current clip and the limited overlay
             composed_clip = mp.CompositeVideoClip([clip, overlay_clip])
             final_clip.append(composed_clip)
-            # Concatenate the composed clip to the final clip
-            #final_clip = mp.concatenate_videoclips([final_clip, composed_clip])
         else:
             final_clip.append(clip)
-            #final_clip = mp.concatenate_videoclips([final_clip, clip])
 
     # Add the outro video at the end of the final clip
     if addIntroAndOverlay:
@@ -246,11 +243,10 @@ if not all(os.path.exists(file) for file in [overlayImage, introVideo, introMusi
     print("Exiting script due to missing files.")
     exit()
 
+print(text2art("f(x,y,z)"))
 # Iterate through each input video
 for inputVideo in inputVideos:
     removeTempFiles()  # Reinitialize for each video
-
     extracted_audio_file = strip_audio_from_mkv(inputVideo, outputAudio)
-
     time_occurrences = find_killsound_audio_pattern("ding.wav", "Hitsound_SquadElimination.wav", extracted_audio_file)
     stitchVideosTogether(time_occurrences, inputVideo,overlayImage, outtroVideo, addIntroOuttroAndOverlay)
