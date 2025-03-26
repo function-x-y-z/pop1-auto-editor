@@ -248,9 +248,15 @@ inputVideos = [
 ]
 
 # Check file existence for all videos and other files
-if not all(os.path.exists(file) for file in [overlayImage, introVideo, introMusic] + inputVideos):
-    print("Exiting script due to missing files.")
+if addIntroOuttroAndOverlay:
+    if not all(os.path.exists(file) for file in [overlayImage, introVideo, introMusic]):
+        print("Exiting script: addIntroOuttroAndOverlay is True, but not all of the files were found!")
+        exit()
+
+if not inputVideos:  # Check if the list is empty
+    print("Error: No video files found in the 'videos_to_process' directory.")
     exit()
+
 
 
 # Iterate through each input video
