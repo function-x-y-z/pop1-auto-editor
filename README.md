@@ -15,28 +15,54 @@ Before you begin, ensure you have the following installed:
 - **Python 3.10** (or higher)
 - **pip** (Python package installer)
 
-### Step 1: Clone the Repository
+## Setup
 
-First, clone the repository to your local machine using Git:
+1. **Clone the Repository:**
 
-```bash
-git clone https://github.com/function-x-y-z/pop1-auto-editor.git
-cd pop1-auto-editor
-```
-Step 2: Install Dependencies
+    ```bash
+    git clone https://github.com/function-x-y-z/pop1-auto-editor.git
+    ```
 
-Install the required Python packages listed in the requirements.txt file:
-```bash
-pip install -r requirements.txt
-```
-Step 3: Run the Script
+2. **Navigate to the Project Directory:**
+
+    ```bash
+    cd pop1-auto-editor
+    ```
+
+3. **Set Up the Virtual Environment:**
+
+    ```bash
+    python -m venv venv
+    ```
+
+4. **Activate the Virtual Environment:**
+
+    - On **Windows**:
+
+      ```bash
+      venv\Scripts\activate
+      ```
+
+    - On **macOS/Linux**:
+
+      ```bash
+      source venv/bin/activate
+      ```
+
+5. **Install Dependencies:**
+
+    ```bash
+    pip install -r requirements.txt
+    ```
+
+6. **Run the Script:**
 
 Once the dependencies are installed, you can run the script to automatically edit the videos. For example:
 ```bash
-python extractDeathTimes.py
+python src/extractDeathTimes.py
 ```
 
 ### Customization:
 
-There is a boolean within the script 'addIntroOuttroAndOverlay = True';  this boolean decides weather to add an intro video, outro, and an overlay image.  You can see how I named those files within the script.
-Set this to false to just get the edited kill clips.
+There is a boolean within the script 'addIntroOuttroAndOverlay = False';  this boolean decides weather to add an intro video, outro, and an overlay image.  You can see how I named those files within the script.
+Set this to true if you want to add your own intro/outro/overlay to the final edited clip.

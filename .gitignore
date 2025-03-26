@@ -12,3 +12,5 @@ Music_RoundEnd_Victory_Stinger.wav
 extracted_audio.wav
 storage/*
 processed_original_videos/*
+venv/
+__pycache__/

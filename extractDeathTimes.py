@@ -226,7 +226,7 @@ introVideo = 'intro.mkv'
 introMusic = 'intro.wav'
 outtroVideo = 'outtro.mp4'
 
-addIntroOuttroAndOverlay = True
+addIntroOuttroAndOverlay = False
 timeBeforeKill = 5
 timeAfterKill = 2
 correlationThreshould = 0.63
@@ -243,6 +243,7 @@ if not all(os.path.exists(file) for file in [overlayImage, introVideo, introMusi
     print("Exiting script due to missing files.")
     exit()
 
+print("Created by: ")
 print(text2art("f(x,y,z)"))
 # Iterate through each input video
 for inputVideo in inputVideos:
