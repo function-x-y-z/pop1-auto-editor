@@ -229,13 +229,15 @@ introVideo = 'intro.mkv'
 introMusic = 'intro.wav'
 outtroVideo = 'outtro.mp4'
 
-addIntroOuttroAndOverlay = True
+addIntroOuttroAndOverlay = False
 timeBeforeKill = 5
 timeAfterKill = 2
 correlationThreshould = 0.63
 
-print("Created by: ")
+print("Population One auto video editor was created by: ")
+print("_________________________________________________")
 print(text2art("f(x,y,z)"))
+print("_________________________________________________")
 
 for directory in [inputVideosDir, outputVideosDir, processedOriginalVideos]:
     os.makedirs(directory, exist_ok=True)
