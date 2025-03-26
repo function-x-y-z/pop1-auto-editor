@@ -59,7 +59,7 @@ Before you begin, ensure you have the following installed:
 
 Once the dependencies are installed, you can run the script to automatically edit the videos. For example:
 ```bash
-python src/extractDeathTimes.py
+python extractDeathTimes.py
 ```
 
 ### Customization:

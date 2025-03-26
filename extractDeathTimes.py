@@ -1,3 +1,4 @@
+import os
 import subprocess
 from librosa import load, core
 import numpy as np
@@ -8,6 +9,8 @@ import moviepy.editor as mp
 import math
 import shutil
 from art import text2art
+
+
 def strip_audio_from_mkv(mkv_file, output_filename="audio.wav"):
     print("stripping audio from "+mkv_file)
     try:
@@ -226,10 +229,16 @@ introVideo = 'intro.mkv'
 introMusic = 'intro.wav'
 outtroVideo = 'outtro.mp4'
 
-addIntroOuttroAndOverlay = False
+addIntroOuttroAndOverlay = True
 timeBeforeKill = 5
 timeAfterKill = 2
 correlationThreshould = 0.63
+
+print("Created by: ")
+print(text2art("f(x,y,z)"))
+
+for directory in [inputVideosDir, outputVideosDir, processedOriginalVideos]:
+    os.makedirs(directory, exist_ok=True)
 
 # Get video file paths from the directory
 inputVideos = [
@@ -243,8 +252,7 @@ if not all(os.path.exists(file) for file in [overlayImage, introVideo, introMusi
     print("Exiting script due to missing files.")
     exit()
 
-print("Created by: ")
-print(text2art("f(x,y,z)"))
+
 # Iterate through each input video
 for inputVideo in inputVideos:
     removeTempFiles()  # Reinitialize for each video
