@@ -1,15 +1,18 @@
 import os
 import subprocess
-from librosa import load, core
+from librosa import load
 import numpy as np
 import librosa
 from moviepy.editor import *
-from moviepy.editor import VideoFileClip
 import moviepy.editor as mp
 import math
 import shutil
 from art import text2art
 
+
+
+# build command:  
+#  pyinstaller --onefile --console --add-data "ding.wav;." --add-data "Hitsound_SquadElimination.wav;." pop1-auto-editor.py
 
 def strip_audio_from_mkv(mkv_file, output_filename="audio.wav"):
     print("stripping audio from "+mkv_file)
@@ -203,21 +206,24 @@ def removeTempFiles():
     if os.path.exists(file_path):
         os.remove(file_path)
 
-def check_file_existence(inputVideo, overlayImage, introVideo, introMusic):
-    if not os.path.exists(inputVideo):
-        print(f"Error: {inputVideo} does not exist.")
-        return False
-    if not os.path.exists(overlayImage):
-        print(f"Error: {overlayImage} does not exist.")
-        return False
-    if not os.path.exists(introVideo):
-        print(f"Error: {introVideo} does not exist.")
-        return False
-    if not os.path.exists(introMusic):
-        print(f"Error: {introMusic} does not exist.")
-        return False
-    return True
+def get_resource_path(filename):
+    """Get the correct path for bundled files when running as an .exe."""
+    if getattr(sys, 'frozen', False):  # Check if running as a bundled executable
+        base_path = sys._MEIPASS  # Temporary folder used by PyInstaller
+    else:
+        base_path = os.path.dirname(__file__)  # Normal script execution
+    return os.path.join(base_path, filename)
 
+def copy_media_files_to_dir():
+    """Copy bundled files to the current working directory if they don’t exist."""
+    files_to_copy = ["ding.wav", "Hitsound_SquadElimination.wav"]  # List your files here
+    for file in files_to_copy:
+        source_path = get_resource_path(file)
+        destination_path = os.path.join(os.getcwd(), file)  # Copy to execution dir
+
+        if not os.path.exists(destination_path):  # Avoid overwriting existing files
+            shutil.copy(source_path, destination_path)
+            print(f"Copied {file} to {destination_path}")
 
 # Directory path to retrieve videos from
 inputVideosDir = "videos_to_process"
@@ -242,6 +248,7 @@ print("_________________________________________________")
 for directory in [inputVideosDir, outputVideosDir, processedOriginalVideos]:
     os.makedirs(directory, exist_ok=True)
 
+copy_media_files_to_dir()
 # Get video file paths from the directory
 inputVideos = [
     os.path.join(inputVideosDir, file)
@@ -249,15 +256,19 @@ inputVideos = [
     if file.endswith((".mkv", ".mp4"))  # Filter for video files
 ]
 
-# Check file existence for all videos and other files
-if addIntroOuttroAndOverlay:
-    if not all(os.path.exists(file) for file in [overlayImage, introVideo, introMusic]):
-        print("Exiting script: addIntroOuttroAndOverlay is True, but not all of the files were found!")
-        exit()
+try:
+    # Check file existence for all videos and other files
+    if addIntroOuttroAndOverlay:
+        if not all(os.path.exists(file) for file in [overlayImage, introVideo, introMusic]):
+            raise FileNotFoundError("Exiting script: addIntroOuttroAndOverlay is True, but not all of the files were found!")
 
-if not inputVideos:  # Check if the list is empty
-    print("Error: No video files found in the 'videos_to_process' directory.")
-    exit()
+    if not inputVideos:  # Check if the list is empty
+        raise FileNotFoundError("Error: No video files found in the 'videos_to_process' directory.")
+
+except Exception as e:
+    print(f"\n An error occurred: {e}")
+    input("\n Press Enter key to exit...")
+    sys.exit(1)
 
 
 
