@@ -1,6 +1,5 @@
 import os
 import subprocess
-from librosa import load
 import numpy as np
 import librosa
 from moviepy.editor import *
@@ -140,12 +139,13 @@ def stitchVideosTogether(times, inputVideo, overlayImage, outroVideo , addIntroA
     print(text2art(f"{len(times)}"))
     inputVideo = inputVideo.replace(inputVideosDir,processedOriginalVideos)
     video = mp.VideoFileClip(inputVideo)
-    intro = mp.VideoFileClip(introVideo)
-    music = mp.AudioFileClip(introMusic)
-    outro = mp.VideoFileClip(outroVideo)
+    if addIntroAndOverlay:
+        intro = mp.VideoFileClip(introVideo)
+        music = mp.AudioFileClip(introMusic)
+        outro = mp.VideoFileClip(outroVideo)
     merged_times = []
 
-    # Merge consecutive times (unchanged)
+    # Merge consecutive times
     i = 0
     while i < len(times):
         start_time = times[i] - timeBeforeKill
@@ -156,14 +156,10 @@ def stitchVideosTogether(times, inputVideo, overlayImage, outroVideo , addIntroA
         merged_times.append((start_time, end_time))
         i += 1
 
-    # Load overlay image
-    overlay = mp.ImageClip(overlayImage)
-
-    # Create intro clip with music
-    intro_with_music = intro.set_audio(music)
-
     final_clip = []  
     if addIntroAndOverlay:
+        overlay = mp.ImageClip(overlayImage)
+        intro_with_music = intro.set_audio(music)
         final_clip.append(intro_with_music)
 
     # Overlay logic for remaining clips
