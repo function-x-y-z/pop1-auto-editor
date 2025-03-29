@@ -7,14 +7,15 @@ import moviepy.editor as mp
 import math
 import shutil
 from art import text2art
-
+from tqdm import tqdm
 
 
 # build command:  
+#  venv\Scripts\activate
 #  pyinstaller --onefile --console --add-data "ding.wav;." --add-data "Hitsound_SquadElimination.wav;." pop1-auto-editor.py
 
 def strip_audio_from_mkv(mkv_file, output_filename="audio.wav"):
-    print("stripping audio from "+mkv_file)
+    print("Processing file: "+mkv_file)
     try:
         shutil.move(mkv_file, os.path.join(processedOriginalVideos, os.path.basename(mkv_file)))
         mkv_file = os.path.join(processedOriginalVideos, os.path.basename(mkv_file))
@@ -99,9 +100,9 @@ def find_killsound_audio_pattern(pattern_file1, pattern_file2, audio_file):
     pattern1_shape = pattern1_spectrogram.shape
     pattern2_shape = pattern2_spectrogram.shape
 
-    def check_correlation(correlation, pattern_file, correlation1):
+    def check_correlation(correlation, correlation1):
         if correlation > correlationThreshould and correlation != correlation1:
-            print(f"Squad kill sound detected: {correlation}, kill sound correlation not met: {correlation1}")
+            tqdm.write(f"Squad kill sound detected: {correlation},but kill sound correlation not met: {correlation1}")
         if correlation > correlationThreshould and correlation1 > 0.25:
             time_in_samples = i * hop_length
             time_in_seconds = math.floor(time_in_samples / sr_audio)
@@ -109,16 +110,17 @@ def find_killsound_audio_pattern(pattern_file1, pattern_file2, audio_file):
                 time_array.append(time_in_seconds)
                 minutes = int(time_in_seconds // 60)
                 seconds = int(time_in_seconds % 60)
-                print(f"Appending: {pattern_file}, Correlation: {correlation}, Time: {minutes,seconds}")
+                tqdm.write(f"Kill detected with correlation: {correlation} @ {minutes,seconds}")
 
     time_array = []
     # Traverse audio spectrogram
-    for i in range(audio_spectrogram.shape[1] - max(pattern1_shape[1], pattern2_shape[1])):
+    loop_range = range(audio_spectrogram.shape[1] - max(pattern1_shape[1], pattern2_shape[1]))
+    for i in tqdm(loop_range, desc="Processing", unit="step"):
         correlation1 = np.corrcoef(pattern1_spectrogram.flatten(), audio_spectrogram[:, i:i + pattern1_shape[1]].flatten())[0, 1]
         correlation2 = np.corrcoef(pattern2_spectrogram.flatten(), audio_spectrogram[:, i:i + pattern2_shape[1]].flatten())[0, 1]
         
-        check_correlation(correlation1, pattern_file1, correlation1)
-        check_correlation(correlation2, pattern_file2, correlation1)
+        check_correlation(correlation1, correlation1)
+        check_correlation(correlation2, correlation1)
 
     print(f"time array: {time_array}")
     return time_array
@@ -234,11 +236,11 @@ outtroVideo = 'outtro.mp4'
 addIntroOuttroAndOverlay = False
 timeBeforeKill = 5
 timeAfterKill = 2
-correlationThreshould = 0.63
+correlationThreshould = 0.66
 
 print("Population One auto video editor was created by: ")
 print("_________________________________________________")
-print(text2art("f(x,y,z)"))
+print(text2art("f(x,y,z)", font="slant"))
 print("_________________________________________________")
 
 for directory in [inputVideosDir, outputVideosDir, processedOriginalVideos]:
