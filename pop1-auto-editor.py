@@ -15,20 +15,46 @@ from tqdm import tqdm
 #  pyinstaller --onefile --console --add-data "ding.wav;." --add-data "Hitsound_SquadElimination.wav;." pop1-auto-editor.py
 
 def strip_audio_from_mkv(mkv_file, output_filename="audio.wav"):
-    print("Processing file: "+mkv_file)
+    print("Processing file: " + mkv_file)
     try:
         shutil.move(mkv_file, os.path.join(processedOriginalVideos, os.path.basename(mkv_file)))
         mkv_file = os.path.join(processedOriginalVideos, os.path.basename(mkv_file))
     except PermissionError:
-        print(f"Error: Could not move {inputVideo}. File might be in use.")
+        print(f"Error: Could not move {mkv_file}. File might be in use.")
+    
+    # First check if the file has audio using ffprobe
+    check_audio_cmd = ["ffprobe", "-i", mkv_file, "-show_streams", "-select_streams", "a", "-loglevel", "error"]
+    result = subprocess.run(check_audio_cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    
+    # If no audio streams are found, the stdout will be empty
+    if not result.stdout:
+        print(f"Warning: No audio streams found in {mkv_file}")
+        return None
+    
+    # If audio exists, proceed with extraction
     command = ["ffmpeg", "-i", mkv_file, "-vn", "-acodec", "pcm_s16le", output_filename]
-    process = subprocess.Popen(command, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    process.communicate()
-    process.stdin.close()
-    process.stdout.close()
-    process.stderr.close()
-    process.wait()
-    return output_filename
+    
+    try:
+        process = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        stdout, stderr = process.communicate()
+        
+        if process.returncode != 0:
+            print(f"Error extracting audio: {stderr.decode('utf-8')}")
+            return None
+        
+        return output_filename
+    except Exception as e:
+        print(f"An error occurred during audio extraction: {str(e)}")
+        return None
+    finally:
+        # Ensure resources are properly closed
+        if 'process' in locals():
+            if process.stdin:
+                process.stdin.close()
+            if process.stdout:
+                process.stdout.close()
+            if process.stderr:
+                process.stderr.close()
 
 def find_squad_win_audio_pattern(pattern_file, audio_file, correlationThreshold=0.5):
     """Finds occurrences of a pattern within an audio file."""
