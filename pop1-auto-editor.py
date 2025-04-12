@@ -268,7 +268,7 @@ print("Population One auto video editor was created by: ")
 print("_________________________________________________")
 print(text2art("f(x,y,z)", font="slant"))
 print("_________________________________________________")
-
+print("Shameless plug: If you know of any opportunities for an experienced software engineer with a background in mathematics (and a love of VR), please reach out")
 for directory in [inputVideosDir, outputVideosDir, processedOriginalVideos]:
     os.makedirs(directory, exist_ok=True)
 
