@@ -14,6 +14,7 @@ Before you begin, ensure you have the following installed:
 
 - **Python 3.10** (or higher)
 - **pip** (Python package installer)
+- **ffmpeg**
 
 ## Setup
 
