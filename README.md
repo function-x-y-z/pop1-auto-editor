@@ -14,6 +14,13 @@ Before you begin, ensure you have the following installed:
 
 - **Python 3.10** (or higher)
 - **pip** (Python package installer)
+- **Git** – Required to clone the repository.  
+  - Download from [https://git-scm.com/downloads](https://git-scm.com/downloads)
+  - After installation, you should be able to run `git --version` from your terminal to confirm it's installed.
+
+- **FFmpeg** – Required for processing and stitching video clips.  
+  - Download from [https://ffmpeg.org/download.html](https://ffmpeg.org/download.html)  
+  - Make sure `ffmpeg` is added to your system's PATH so it can be used from the command line (you should be able to run `ffmpeg -version`).
 
 ## Setup
 
